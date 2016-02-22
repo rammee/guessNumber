@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.ramilizmailov.guessnumber.PlayerData;
 
-public interface PlayerPersister {
+public interface PlayerDAO {
 	void savePlayerData(PlayerData player);
 	List<PlayerData> getPlayersData();
 }

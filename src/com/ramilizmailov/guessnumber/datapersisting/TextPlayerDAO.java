@@ -1,21 +1,18 @@
 package com.ramilizmailov.guessnumber.datapersisting;
 
-import java.io.EOFException;
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import com.ramilizmailov.guessnumber.PlayerData;
 
-public class ObjectPlayerPersister implements PlayerPersister{
-
-	private static final String PLAYER_RATING_FILE_NAME = "resultsObj.txt";
+public class TextPlayerDAO implements PlayerDAO {
 
 	@Override
 	public void savePlayerData(PlayerData player) {
@@ -35,16 +32,17 @@ public class ObjectPlayerPersister implements PlayerPersister{
 		if (newPlayer) {
 			ratingList.add(player);
 		}
-		File resFile = new File(PLAYER_RATING_FILE_NAME);
-		try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(resFile, false))) {
+		File resFile = new File("results.txt");
+		try (Writer writer = new FileWriter(resFile, false)) {
 			if (!resFile.exists()) {
 				resFile.createNewFile();
 			}
 			for (PlayerData pr : ratingList) {
-				os.writeObject(pr);
+				writer.write(pr.getName() + ":::" + pr.getTrials() + "\n");
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			System.out.println("Ошибка при сохранении результата");
+			e.printStackTrace();
 		}
 		
 	}
@@ -59,16 +57,20 @@ public class ObjectPlayerPersister implements PlayerPersister{
 	
 	private List<PlayerData> getRatingList() {
 		List<PlayerData> ratingList = new ArrayList<>();
-		File resFile = new File(PLAYER_RATING_FILE_NAME);
+		File resFile = new File("results.txt");
 		if (!resFile.exists())
 			return ratingList;
-		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(resFile))) {
-			for (Object obj = ois.readObject();;obj = ois.readObject())
-				ratingList.add((PlayerData)obj);
-		} catch (EOFException e) {
-			return ratingList;
-		} catch (IOException | ClassNotFoundException e) {
-			throw new RuntimeException(e);
+		try (BufferedReader reader = new BufferedReader(new  FileReader(resFile))) {
+			for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+				String[] arr = line.split(":::"); 
+				ratingList.add(new PlayerData(arr[0], Integer.parseInt(arr[1])));
+			}
+		} catch (IOException e) {
+			System.out.println("Ошибка при печати результатов");
+			e.printStackTrace();
+			return Collections.emptyList();
 		}
+		return ratingList;
 	}
+
 }
