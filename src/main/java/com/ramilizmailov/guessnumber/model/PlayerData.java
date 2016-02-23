@@ -1,7 +1,5 @@
 package com.ramilizmailov.guessnumber.model;
 
-import com.sun.deploy.util.StringUtils;
-
 import java.io.Serializable;
 import java.util.Objects;
 
