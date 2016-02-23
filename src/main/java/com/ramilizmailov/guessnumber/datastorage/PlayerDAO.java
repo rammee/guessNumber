@@ -24,7 +24,6 @@ public class PlayerDAO  {
 	/**
 	 * Saves or refreshes player data.
 	 * @param player
-	 * @return true if new record achieved, false otherwise
      */
 	public void savePlayerData(PlayerData player) {
 		List<PlayerData> ratingList = getPlayerDataList();

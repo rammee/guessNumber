@@ -16,7 +16,10 @@ public class GameCore {
 	private int maxNumber;
 	/** the number to guess */
 	private int theNumber;
-	private int trials;
+	/** overall number of totalTrials made during game. eventually saved as final score */
+	private int totalTrials;
+	/** number of totalTrials which player made during current level*/
+	private int currentLevelTrials;
 	private PlayerDAO playerDAO;
 	private GameController gameController;
 
@@ -31,7 +34,8 @@ public class GameCore {
 		level = 1;
 		maxNumber = (int) Math.pow(10, level);
 		theNumber = rnd.nextInt(maxNumber);
-		trials = 0;
+		totalTrials = 0;
+		currentLevelTrials = 0;
 	}
 
 	/**
@@ -39,10 +43,15 @@ public class GameCore {
 	 * @return true if game is over
      */
 	private boolean nextLevel() {
+		gameController.printMessage("Trials made: " + currentLevelTrials);
+		totalTrials += currentLevelTrials;
+		currentLevelTrials = 0;
 		if (++level > MAX_LEVEL) {
-			gameController.printMessage(String.format("Trials: %s\nYour name:", trials));
+			gameController.printMessage("Total trials: " + totalTrials);
+			gameController.printMessage("Your name:");
 			return true;
 		}
+
 		maxNumber = (int) Math.pow(10, level);
 		theNumber = rnd.nextInt(maxNumber);
 		start();
@@ -61,7 +70,7 @@ public class GameCore {
      */
 	public boolean processInput(String inputString) {
 		try {
-			trials++;
+			currentLevelTrials++;
 				int input = Integer.parseInt(inputString);
 
 				if (theNumber > input) {
@@ -75,7 +84,7 @@ public class GameCore {
 			return false;
 		} catch (NumberFormatException e) {
 			gameController.printMessage("Please, provide a number!");
-			trials--;
+			currentLevelTrials--;
 			return false;
 		} catch (Exception e){
 			gameController.terminate();
@@ -84,7 +93,7 @@ public class GameCore {
 	}
 
 	public void saveResultsAndShowResultsTable(String playerName) {
-		playerDAO.savePlayerData(new PlayerData(playerName, trials));
+		playerDAO.savePlayerData(new PlayerData(playerName, totalTrials));
 		gameController.displayResultsTable(getPlayerDataString());
 	}
 
@@ -100,8 +109,12 @@ public class GameCore {
 		return level;
 	}
 
-	int getTrials() {
-		return trials;
+	int getTotalTrials() {
+		return totalTrials;
+	}
+
+	int getCurrentLevelTrials() {
+		return currentLevelTrials;
 	}
 
 	int getTheNumber() {

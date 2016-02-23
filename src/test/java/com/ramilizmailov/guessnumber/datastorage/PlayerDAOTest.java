@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.List;
 
-public class PlayerDAOTests {
+public class PlayerDAOTest {
     private static final String TEST_RESULT_FILE_NAME = "testResults.tmp";
     private File testFile = new File(TEST_RESULT_FILE_NAME);
     private PlayerDAO playerDAO = new PlayerDAO(TEST_RESULT_FILE_NAME);
