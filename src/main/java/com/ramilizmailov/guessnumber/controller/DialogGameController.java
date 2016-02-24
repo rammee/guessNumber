@@ -76,7 +76,7 @@ public class DialogGameController extends JDialog  implements GameController {
 
     @Override
     public void printMessage(String message) {
-        gameMasterTextPane.setText(gameMasterTextPane.getText() + "\n" + message);
+        gameMasterTextPane.setText(message + "\n" + gameMasterTextPane.getText());
     }
 
     @Override
