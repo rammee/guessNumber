@@ -11,12 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
-/**
- * Created by RAMSES on 23.02.2016.
- */
 public class GameModelTest {
 
     private GameModel gameModel;
@@ -79,6 +74,5 @@ public class GameModelTest {
             theNumber = gameModel.getCurrentLevel().getNumberToGuess();
             assertEquals(gameModel.getTotalEfforts(), expectedTotalTrials++);
         }
-        //gameModel.getGameController().disposeView();
     }
 }

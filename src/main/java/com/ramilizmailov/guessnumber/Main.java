@@ -21,7 +21,7 @@ public class Main {
         try {
             type = ControllerType.valueOf(controllerTypeName.toUpperCase());
         } catch (IllegalArgumentException e) {
-            type = ControllerType.GUI;
+            type = ControllerType.CONSOLE;
         }
 
         LevelFactory levelFactory = new PowerOfTenLevelFactory(1);
