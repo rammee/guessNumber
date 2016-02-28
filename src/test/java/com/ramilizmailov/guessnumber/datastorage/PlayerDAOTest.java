@@ -1,17 +1,19 @@
 package com.ramilizmailov.guessnumber.datastorage;
 
-import com.ramilizmailov.guessnumber.model.PlayerData;
+import com.ramilizmailov.guessnumber.model.players.PlayerData;
 import org.junit.After;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 public class PlayerDAOTest {
     private static final String TEST_RESULT_FILE_NAME = "testResults.tmp";
     private File testFile = new File(TEST_RESULT_FILE_NAME);
-    private PlayerDAO playerDAO = new PlayerDAO(TEST_RESULT_FILE_NAME);
+    private PlayerDAO playerDAO = new BasicPlayerDAO(TEST_RESULT_FILE_NAME);
 
     @After
     public void deleteTestFile() {
@@ -29,7 +31,7 @@ public class PlayerDAOTest {
         assertEquals(playerDataList.size(), 1);
         PlayerData restoredPlayerData = playerDataList.get(0);
         assertEquals(playerData.getName(), restoredPlayerData.getName());
-        assertEquals(playerData.getTrials(), restoredPlayerData.getTrials());
+        assertEquals(playerData.getEfforts(), restoredPlayerData.getEfforts());
     }
 
     @Test

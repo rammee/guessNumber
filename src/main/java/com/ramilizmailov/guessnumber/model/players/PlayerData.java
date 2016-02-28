@@ -1,4 +1,4 @@
-package com.ramilizmailov.guessnumber.model;
+package com.ramilizmailov.guessnumber.model.players;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,7 +8,7 @@ public class PlayerData implements Comparable<PlayerData>, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
-	private Integer trials;
+	private Integer efforts;
 	
 	public PlayerData(String name, Integer score) {
 		super();
@@ -19,12 +19,12 @@ public class PlayerData implements Comparable<PlayerData>, Serializable {
 			throw new IllegalArgumentException("Name should not be empty");
 		}
 		this.name = name;
-		this.trials = score;
+		this.efforts = score;
 	}
 
 	@Override
 	public int compareTo(PlayerData o) {
-		return this.trials.compareTo(o.trials);
+		return this.efforts.compareTo(o.efforts);
 	}
 
 	public String getName() {
@@ -35,12 +35,12 @@ public class PlayerData implements Comparable<PlayerData>, Serializable {
 		this.name = name;
 	}
 
-	public Integer getTrials() {
-		return trials;
+	public Integer getEfforts() {
+		return efforts;
 	}
 
-	public void setTrials(Integer trials) {
-		this.trials = trials;
+	public void setEfforts(Integer efforts) {
+		this.efforts = efforts;
 	}
 
 	@Override
@@ -51,14 +51,14 @@ public class PlayerData implements Comparable<PlayerData>, Serializable {
 		PlayerData that = (PlayerData) o;
 
 		if (!name.toLowerCase().equals(that.name.toLowerCase())) return false;
-		return trials.equals(that.trials);
+		return efforts.equals(that.efforts);
 
 	}
 
 	@Override
 	public int hashCode() {
 		int result = name.toLowerCase().hashCode();
-		result = 31 * result + trials.hashCode();
+		result = 31 * result + efforts.hashCode();
 		return result;
 	}
 }
