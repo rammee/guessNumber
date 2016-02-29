@@ -1,6 +1,7 @@
 package com.ramilizmailov.guessnumber.view;
 
 import com.ramilizmailov.guessnumber.model.GameModel;
+import com.ramilizmailov.guessnumber.model.levels.Level;
 
 import java.beans.PropertyChangeEvent;
 import java.util.Scanner;
@@ -9,10 +10,8 @@ import java.util.function.Consumer;
 public class ConsoleGameView implements GameView {
 
     private InputProcessor inputProcessor;
-    private GameModel gameModel;
 
-    public ConsoleGameView(GameModel gameModel) {
-        this.gameModel = gameModel;
+    public ConsoleGameView() {
         inputProcessor = new InputProcessor();
     }
 
@@ -25,7 +24,12 @@ public class ConsoleGameView implements GameView {
     public void propertyChange(PropertyChangeEvent evt) {
         String propName = evt.getPropertyName();
         if (GameModel.MESSAGE_PROPERTY_NAME.equals(propName)) {
-            showMessage(gameModel.getMessage());
+            showMessage((String)evt.getNewValue());
+        } else if (GameModel.CURRENT_LEVEL_PROPERTY_NAME.equals(propName)) {
+            Level level = (Level)evt.getNewValue();
+            showMessage(level.getDescription());
+        } else if (GameModel.TOTAL_EFFORTS_PROPERTY_NAME.equals(propName)) {
+            showMessage("Bingo! Efforts made: " + evt.getNewValue());
         }
     }
 

@@ -35,7 +35,7 @@ public class GameModelTest {
         int expectedTotalTrials = gameModel.getTotalEfforts();
 
         gameModel.processPlayerInput(String.valueOf(numberToGuess + 1));
-        int level = gameModel.getCurrentLevel().getLevel();
+        int level = gameModel.getCurrentLevel().getLevelNo();
         int trials = gameModel.getCurrentLevelEfforts();
         int totalTrials = gameModel.getTotalEfforts();
 
@@ -52,7 +52,7 @@ public class GameModelTest {
         int expectedTotalTrials = gameModel.getTotalEfforts();
 
         gameModel.processPlayerInput(String.valueOf("doohickey"));
-        int level = gameModel.getCurrentLevel().getLevel();
+        int level = gameModel.getCurrentLevel().getLevelNo();
         int trials = gameModel.getCurrentLevelEfforts();
         int totalTrials = gameModel.getTotalEfforts();
 
@@ -68,7 +68,7 @@ public class GameModelTest {
         int expectedTotalTrials = gameModel.getTotalEfforts() + 1;
 
         for (int expectedLevel = 1; expectedLevel <= MAX_LEVEL; expectedLevel++) {
-            int level = gameModel.getCurrentLevel().getLevel();
+            int level = gameModel.getCurrentLevel().getLevelNo();
             assertEquals(level, expectedLevel);
             gameModel.processPlayerInput(String.valueOf(theNumber));
             theNumber = gameModel.getCurrentLevel().getNumberToGuess();

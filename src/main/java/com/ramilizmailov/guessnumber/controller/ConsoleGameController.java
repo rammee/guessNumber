@@ -12,7 +12,7 @@ public class ConsoleGameController extends GameController {
 
     @Override
     public void onGameOver() {
-        gameView.showMessage("Enter your name: ");
+        gameView.showMessage("Congratulations!\n Enter your name: ");
         gameView.setInputProcessingStrategy(s -> {
             gameModel.savePlayerResults(s);
             gameView.showMessage("\n\nSCORE TABLE: \n");

@@ -1,7 +1,6 @@
 package com.ramilizmailov.guessnumber.model;
 
 import com.ramilizmailov.guessnumber.controller.GameController;
-import com.ramilizmailov.guessnumber.datastorage.BasicPlayerDAO;
 import com.ramilizmailov.guessnumber.datastorage.PlayerDAO;
 import com.ramilizmailov.guessnumber.model.levels.Level;
 import com.ramilizmailov.guessnumber.model.levels.LevelFactory;
@@ -12,6 +11,10 @@ import java.beans.PropertyChangeSupport;
 
 public class GameModel {
     public static final String MESSAGE_PROPERTY_NAME = "message";
+    public static final String CURRENT_LEVEL_PROPERTY_NAME = "currentLevel";
+    public static final String CURRENT_LEVEL_EFFORTS_PROPERTY_NAME = "currentLevelEfforts";
+    public static final String TOTAL_EFFORTS_PROPERTY_NAME = "totalEfforts";
+
     private int totalEfforts;
     private int currentLevelEfforts;
     private Level currentLevel;
@@ -31,25 +34,21 @@ public class GameModel {
     }
 
     private void init() {
-        totalEfforts = 0;
-        currentLevelEfforts = 0;
+        setTotalEfforts(0);
+        setCurrentLevelEfforts(0);
     }
 
     public void proceedToTheNextLevel() {
         if (currentLevelEfforts > 0) {
-            setMessage("Efforts made: " + currentLevelEfforts);
-            totalEfforts += currentLevelEfforts;
-            currentLevelEfforts = 0;
+            setTotalEfforts(totalEfforts + currentLevelEfforts);
+            setCurrentLevelEfforts(0);
         }
         if (!levelFactory.hasMoreLevels()) {
-            setMessage("Total efforts: " + totalEfforts);
             setGameOver(true);
             if (gameController != null)
                 gameController.onGameOver();
         } else {
-            currentLevel = levelFactory.nextLevel();
-            setMessage(
-                    "Level " + currentLevel.getLevel() + ". Guess number from 0 to " + (currentLevel.getMaxNumber()));
+            setCurrentLevel(levelFactory.nextLevel());
         }
     }
 
@@ -57,21 +56,19 @@ public class GameModel {
         if (isGameOver())
             throw new IllegalStateException("Game is over, cannot process input");
         try {
-            currentLevelEfforts++;
             int input = Integer.parseInt(inputString);
             int numberToGuess = currentLevel.getNumberToGuess();
+            setCurrentLevelEfforts(currentLevelEfforts + 1);
 
             if (numberToGuess > input) {
                 setMessage("Greater!");
             } else if (numberToGuess < input) {
                 setMessage("Less!");
             } else {
-                setMessage("Bingo!");
                 proceedToTheNextLevel();
             }
         } catch (NumberFormatException e) {
             setMessage("Please, provide a number!");
-            currentLevelEfforts--;
         }
     }
 
@@ -96,8 +93,15 @@ public class GameModel {
         propertyChangeSupport.firePropertyChange(MESSAGE_PROPERTY_NAME, null, message);
     }
 
-    public String getMessage() {
-        return message;
+    public void setTotalEfforts(int totalEfforts) {
+        this.totalEfforts = totalEfforts;
+        propertyChangeSupport.firePropertyChange(TOTAL_EFFORTS_PROPERTY_NAME, null, totalEfforts);
+    }
+
+    public void setCurrentLevelEfforts(int currentLevelEfforts) {
+        this.currentLevelEfforts = currentLevelEfforts;
+        propertyChangeSupport.firePropertyChange(CURRENT_LEVEL_EFFORTS_PROPERTY_NAME, null, currentLevelEfforts);
+
     }
 
     public void setGameOver(boolean gameOver) {
@@ -106,6 +110,11 @@ public class GameModel {
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
+    }
+
+    public void setCurrentLevel(Level currentLevel) {
+        this.currentLevel = currentLevel;
+        propertyChangeSupport.firePropertyChange(CURRENT_LEVEL_PROPERTY_NAME, null, currentLevel);
     }
 
     public boolean isGameOver() {

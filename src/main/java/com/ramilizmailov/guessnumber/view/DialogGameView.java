@@ -1,8 +1,10 @@
 package com.ramilizmailov.guessnumber.view;
 
 import com.ramilizmailov.guessnumber.model.GameModel;
+import com.ramilizmailov.guessnumber.model.levels.Level;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -17,12 +19,12 @@ public class DialogGameView extends JDialog implements GameView {
     private JButton buttonOK;
     private JTextPane textPane;
     private JTextField answerField;
+    private JLabel effortsLabel;
+    private JLabel totalEffortsLabel;
 
-    private GameModel gameModel;
     private Consumer<String> inputProcessingStrategy;
 
-    public DialogGameView(GameModel gameModel) {
-        this.gameModel = gameModel;
+    public DialogGameView() {
 
         contentPane = new JPanel();
         contentPane.setLayout(new BorderLayout());
@@ -30,7 +32,8 @@ public class DialogGameView extends JDialog implements GameView {
         buttonOK = new JButton("OK");
         buttonOK.setSize(150, 100);
         textPane = new JTextPane();
-        contentPane.add(textPane, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(textPane);
+        contentPane.add(scrollPane, BorderLayout.CENTER);
 
         answerField = new JTextField();
         answerField.setSize(350, 100);
@@ -39,6 +42,13 @@ public class DialogGameView extends JDialog implements GameView {
         southPanel.add(answerField);
         southPanel.add(buttonOK);
         contentPane.add(southPanel, BorderLayout.SOUTH);
+
+        effortsLabel = new JLabel("Efforts: 0");
+        totalEffortsLabel = new JLabel("Total efforts: 0");
+        JPanel northPanel = new JPanel(new GridLayout());
+        northPanel.add(effortsLabel);
+        northPanel.add(totalEffortsLabel);
+        contentPane.add(northPanel, BorderLayout.NORTH);
 
         setContentPane(contentPane);
         setModal(true);
@@ -81,15 +91,24 @@ public class DialogGameView extends JDialog implements GameView {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (gameModel.MESSAGE_PROPERTY_NAME.equals(evt.getPropertyName())) {
+        String propName = evt.getPropertyName();
+        if (GameModel.MESSAGE_PROPERTY_NAME.equals(propName)) {
             showMessage(evt.getNewValue().toString());
+        } else if (GameModel.CURRENT_LEVEL_PROPERTY_NAME.equals(propName)) {
+            Level level = (Level)evt.getNewValue();
+            textPane.setText("");
+            if (level.getLevelNo() > 1) showMessage("Bingo! Proceeding to the next level.\n");
+            setTitle(level.getDescription());
+        } else if (GameModel.CURRENT_LEVEL_EFFORTS_PROPERTY_NAME.equals(propName)) {
+            effortsLabel.setText("Efforts: " + evt.getNewValue());
+        } else if (GameModel.TOTAL_EFFORTS_PROPERTY_NAME.equals(propName)) {
+            totalEffortsLabel.setText("Total efforts: " + evt.getNewValue());
         }
     }
 
     @Override
     public void display() {
         setSize(350, 400);
-        setTitle("Guess Number Game");
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
@@ -100,4 +119,7 @@ public class DialogGameView extends JDialog implements GameView {
         this.inputProcessingStrategy = strategy;
     }
 
+    public JTextPane getTextPane() {
+        return textPane;
+    }
 }

@@ -12,7 +12,7 @@ import com.ramilizmailov.guessnumber.view.GameView;
 
 public class Main {
     /**
-     * Use "gui" param to run game with gui. If no param specified then a console version will be run.
+     * Use "console" param to play via console. If no param specified then a gui version will be run.
      * @param args
      */
     public static void main(String[] args) {
@@ -21,10 +21,10 @@ public class Main {
         try {
             type = ControllerType.valueOf(controllerTypeName.toUpperCase());
         } catch (IllegalArgumentException e) {
-            type = ControllerType.CONSOLE;
+            type = ControllerType.GUI;
         }
-
-        LevelFactory levelFactory = new PowerOfTenLevelFactory(1);
+        int maxLevel = 3;
+        LevelFactory levelFactory = new PowerOfTenLevelFactory(maxLevel);
         GameControllerFactory factory = new GameControllerFactory();
         PlayerDAO playerDAO = new BasicPlayerDAO();
         GameController gameController = factory.createGameController(type, levelFactory, playerDAO);

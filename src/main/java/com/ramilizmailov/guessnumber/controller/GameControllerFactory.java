@@ -16,9 +16,9 @@ public class GameControllerFactory {
 
         switch (type) {
             case GUI:
-                return new DialogGameController(gameModel, new DialogGameView(gameModel));
+                return new DialogGameController(gameModel, new DialogGameView());
             case CONSOLE:
-                return new ConsoleGameController(gameModel, new ConsoleGameView(gameModel));
+                return new ConsoleGameController(gameModel, new ConsoleGameView());
             default:
                 throw new IllegalArgumentException();
         }
