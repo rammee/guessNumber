@@ -1,7 +1,7 @@
 # guessNumber
 A test task.
 
-Can be run in two modes - console and gui. Console mode is run by default. To run a gui mode, use "gui" argument.
+Can be run in two modes - console and gui. Gui mode is run by default. To run a console mode, use "console" parameter.
 
 The goal of this game is to guess a number. It has 3 levels:
 
