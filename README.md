@@ -1,4 +1,4 @@
-# Guess Nuber Game
+# Guess Number Game
 A test task.
 
 Can be run in two modes - console and gui. Gui mode is run by default. To run a console mode, use "console" parameter.
